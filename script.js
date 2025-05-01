@@ -8,7 +8,21 @@ const bookmarkModal = document.getElementById('bookmark-modal');
 const githubModal = document.getElementById('github-modal');
 const bookmarkForm = document.getElementById('bookmark-form');
 const githubForm = document.getElementById('github-form');
-const tabButtons = document.querySelectorAll('.tab-btn');
+
+// Helper functions
+function extractDomain(url) {
+    try {
+        const domain = new URL(url).hostname;
+        return domain;
+    } catch (error) {
+        console.error("Invalid URL:", error);
+        return "";
+    }
+}
+
+function getFaviconUrl(domain, size = 32) {
+    return `https://www.google.com/s2/favicons?domain=${domain}&sz=${size}`;
+}
 
 // Data structure
 let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
@@ -22,15 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Event listeners setup
 function setupEventListeners() {
-    // Tab switching
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            filterItems(button.dataset.tab);
-        });
-    });
-
     // Search functionality
     if (searchInput !== null) {
         searchInput.addEventListener('input', () => {
@@ -74,15 +79,6 @@ function setupEventListeners() {
     githubForm.addEventListener('submit', addGithubRepo);
 }
 
-// Filter items based on tab
-function filterItems(tabType) {
-    if (tabType === 'github') {
-        renderGithubRepos(githubRepos);
-    } else {
-        renderAll();
-    }
-}
-
 // Render all items
 function renderAll() {
     renderBookmarks(bookmarks);
@@ -108,9 +104,18 @@ function renderBookmarks(bookmarksToRender) {
         bookmarkItem.className = 'bookmark-item';
         bookmarkItem.dataset.id = bookmark.id;
 
+        // Get domain if bookmark doesn't have faviconUrl stored
+        if (!bookmark.faviconUrl && bookmark.url) {
+            const domain = extractDomain(bookmark.url);
+            bookmark.faviconUrl = getFaviconUrl(domain);
+            saveBookmarks(); // Save the updated favicon URL
+        }
+
         bookmarkItem.innerHTML = `
-            <span class="bookmark-icon" style="background-color: ${bookmark.color}">
-                <i class="${bookmark.icon ? 'fas ' + bookmark.icon : 'fas fa-link'}"></i>
+            <span class="bookmark-icon">
+                ${bookmark.faviconUrl
+                  ? `<img src="${bookmark.faviconUrl}" alt="${bookmark.title}" width="16" height="16">`
+                  : `<i class="fas fa-link"></i>`}
             </span>
             <div class="bookmark-info">
                 <div class="bookmark-title">${bookmark.title}</div>
@@ -225,15 +230,17 @@ function addBookmark(e) {
 
     const title = document.getElementById('bookmark-title').value;
     const url = document.getElementById('bookmark-url').value;
-    const icon = document.getElementById('bookmark-icon').value;
-    const color = document.getElementById('bookmark-color').value;
+
+    // Get domain and favicon URL
+    const domain = extractDomain(url);
+    const faviconUrl = getFaviconUrl(domain);
 
     const newBookmark = {
         id: Date.now(),
         title,
         url,
-        icon,
-        color,
+        faviconUrl,
+        domain,
         type: 'bookmark'
     };
 
@@ -250,13 +257,11 @@ function addGithubRepo(e) {
 
     const owner = document.getElementById('github-owner').value;
     const repo = document.getElementById('github-repo').value;
-    const color = document.getElementById('github-color').value;
 
     const newRepo = {
         id: Date.now(),
         owner,
         repo,
-        color,
         title: `${owner}/${repo}`,
         type: 'github'
     };
@@ -275,8 +280,6 @@ function editBookmark(id) {
     if (bookmark) {
         document.getElementById('bookmark-title').value = bookmark.title;
         document.getElementById('bookmark-url').value = bookmark.url;
-        document.getElementById('bookmark-icon').value = bookmark.icon || '';
-        document.getElementById('bookmark-color').value = bookmark.color;
 
         // Convert form to edit mode
         bookmarkForm.dataset.mode = 'edit';
@@ -300,18 +303,24 @@ function updateBookmark(e) {
     const id = parseInt(bookmarkForm.dataset.id);
     const title = document.getElementById('bookmark-title').value;
     const url = document.getElementById('bookmark-url').value;
-    const icon = document.getElementById('bookmark-icon').value;
-    const color = document.getElementById('bookmark-color').value;
+
+    // Get domain and favicon URL if URL changed
+    const domain = extractDomain(url);
+    const faviconUrl = getFaviconUrl(domain);
 
     const index = bookmarks.findIndex(b => b.id === id);
 
     if (index !== -1) {
+        // Check if URL has changed
+        const urlChanged = bookmarks[index].url !== url;
+
         bookmarks[index] = {
             ...bookmarks[index],
             title,
             url,
-            icon,
-            color
+            // Update domain and favicon if URL changed
+            domain: urlChanged ? domain : bookmarks[index].domain,
+            faviconUrl: urlChanged ? faviconUrl : bookmarks[index].faviconUrl
         };
 
         saveBookmarks();

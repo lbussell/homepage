@@ -5,6 +5,7 @@
     --sidebar-background: #ffffff;
     --card-background: #ffffff;
     --text-color: #333333;
+    --icon-color: #777777; /* Dimmer color for icons */
     --border-radius: 8px;
     --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     --transition: all 0.3s ease;
@@ -95,8 +96,16 @@ body {
     height: 32px;
     border-radius: 50%;
     margin-right: 12px;
+    background-color: var(--primary-color);
     color: white;
     flex-shrink: 0;
+    overflow: hidden;
+}
+
+.bookmark-icon img {
+    max-width: 16px;
+    max-height: 16px;
+    object-fit: contain;
 }
 
 .bookmark-info {
@@ -126,7 +135,7 @@ body {
     border: none;
     cursor: pointer;
     font-size: 14px;
-    color: #666;
+    color: var(--icon-color);
     margin-left: 5px;
     transition: var(--transition);
 }
@@ -158,7 +167,7 @@ h1 {
     gap: 10px;
 }
 
-.content {
+content {
     margin-top: 20px;
 }
 
@@ -238,7 +247,7 @@ h1 {
     padding: 8px 12px;
     background-color: #f0f0f0;
     border-radius: var(--border-radius);
-    color: var (--text-color);
+    color: var(--text-color);
     text-decoration: none;
     transition: var(--transition);
     text-align: center;
@@ -248,8 +257,16 @@ h1 {
     justify-content: center;
 }
 
+.github-link i {
+    color: var(--icon-color);
+}
+
 .github-link:hover {
     background-color: var(--primary-color);
+    color: white;
+}
+
+.github-link:hover i {
     color: white;
 }
 
@@ -285,6 +302,10 @@ h1 {
 .btn:hover, .btn-small:hover {
     opacity: 0.9;
     transform: translateY(-2px);
+}
+
+.btn i, .btn-small i {
+    color: rgba(255, 255, 255, 0.9);
 }
 
 /* Modal Styles */
