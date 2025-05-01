@@ -308,6 +308,14 @@ content {
     color: rgba(255, 255, 255, 0.9);
 }
 
+.btn-danger {
+    background-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #bd2130;
+}
+
 /* Modal Styles */
 .modal {
     display: none;
@@ -369,6 +377,54 @@ input[type="color"] {
     border: 1px solid #ddd;
     border-radius: var(--border-radius);
     cursor: pointer;
+}
+
+/* Settings Modal Styles */
+.settings-divider {
+    margin: 20px 0;
+    border: none;
+    border-top: 1px solid #eee;
+}
+
+.data-management {
+    margin-top: 20px;
+}
+
+.data-management h3 {
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.data-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.import-label {
+    display: inline-block;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Responsive adjustments for data management buttons */
+@media (max-width: 768px) {
+    .data-buttons {
+        flex-direction: column;
+    }
+}
+
+.reset-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: rgba(220, 53, 69, 0.1);
+    border-radius: var(--border-radius);
+    border-left: 4px solid #dc3545;
+}
+
+.reset-warning {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #dc3545;
 }
 
 /* Responsive Styles */

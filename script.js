@@ -4,10 +4,18 @@ const reposContainer = document.getElementById('repos-container');
 const searchInput = document.getElementById('search-input');
 const addBookmarkBtn = document.getElementById('add-bookmark');
 const addGithubBtn = document.getElementById('add-github');
+const settingsBtn = document.getElementById('settings-btn');
 const bookmarkModal = document.getElementById('bookmark-modal');
 const githubModal = document.getElementById('github-modal');
+const settingsModal = document.getElementById('settings-modal');
 const bookmarkForm = document.getElementById('bookmark-form');
 const githubForm = document.getElementById('github-form');
+const settingsForm = document.getElementById('settings-form');
+const dashboardTitleEl = document.getElementById('dashboard-title');
+const exportDataBtn = document.getElementById('export-data');
+const importDataInput = document.getElementById('import-data');
+const resetDataBtn = document.getElementById('reset-data');
+const tabButtons = document.querySelectorAll('.tab-btn');
 
 // Helper functions
 function extractDomain(url) {
@@ -27,15 +35,30 @@ function getFaviconUrl(domain, size = 32) {
 // Data structure
 let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
 let githubRepos = JSON.parse(localStorage.getItem('githubRepos')) || [];
+let settings = JSON.parse(localStorage.getItem('settings')) || {
+    pageTitle: 'My Bookmarks',
+    dashboardTitle: 'My Dashboard',
+    primaryColor: '#4285f4'
+};
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     renderAll();
     setupEventListeners();
+    applySettings();
 });
 
 // Event listeners setup
 function setupEventListeners() {
+    // Tab switching
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+            filterItems(button.dataset.tab);
+        });
+    });
+
     // Search functionality
     if (searchInput !== null) {
         searchInput.addEventListener('input', () => {
@@ -61,6 +84,7 @@ function setupEventListeners() {
     // Modal controls
     addBookmarkBtn.addEventListener('click', () => openModal(bookmarkModal));
     addGithubBtn.addEventListener('click', () => openModal(githubModal));
+    settingsBtn.addEventListener('click', () => openSettingsModal());
 
     document.querySelectorAll('.close').forEach(closeBtn => {
         closeBtn.addEventListener('click', () => {
@@ -70,13 +94,20 @@ function setupEventListeners() {
 
     // Close modals when clicking outside
     window.addEventListener('click', (e) => {
-        if (e.target === bookmarkModal) closeModals();
-        if (e.target === githubModal) closeModals();
+        if (e.target === bookmarkModal || e.target === githubModal || e.target === settingsModal) {
+            closeModals();
+        }
     });
 
     // Form submissions
     bookmarkForm.addEventListener('submit', addBookmark);
     githubForm.addEventListener('submit', addGithubRepo);
+    settingsForm.addEventListener('submit', saveSettings);
+
+    // Data export and import
+    exportDataBtn.addEventListener('click', exportData);
+    importDataInput.addEventListener('change', importData);
+    resetDataBtn.addEventListener('click', resetData);
 }
 
 // Render all items
@@ -220,8 +251,10 @@ function openModal(modal) {
 function closeModals() {
     bookmarkModal.style.display = 'none';
     githubModal.style.display = 'none';
+    settingsModal.style.display = 'none';
     bookmarkForm.reset();
     githubForm.reset();
+    settingsForm.reset();
 }
 
 // Add bookmark
@@ -361,4 +394,156 @@ function saveBookmarks() {
 
 function saveGithubRepos() {
     localStorage.setItem('githubRepos', JSON.stringify(githubRepos));
+}
+
+// Settings functions
+function openSettingsModal() {
+    // Set current values in form
+    document.getElementById('page-title').value = settings.pageTitle || '';
+    document.getElementById('dashboard-title-input').value = settings.dashboardTitle || '';
+    document.getElementById('primary-color').value = settings.primaryColor || '#4285f4';
+
+    // Open the modal
+    openModal(settingsModal);
+}
+
+function saveSettings(e) {
+    e.preventDefault();
+
+    const pageTitle = document.getElementById('page-title').value;
+    const dashboardTitle = document.getElementById('dashboard-title-input').value;
+    const primaryColor = document.getElementById('primary-color').value;
+
+    settings = {
+        ...settings,
+        pageTitle: pageTitle || 'My Bookmarks',
+        dashboardTitle: dashboardTitle || 'My Dashboard',
+        primaryColor: primaryColor || '#4285f4'
+    };
+
+    localStorage.setItem('settings', JSON.stringify(settings));
+    applySettings();
+    closeModals();
+}
+
+function applySettings() {
+    // Update the page title in the browser tab
+    document.title = settings.pageTitle;
+
+    // Update the dashboard title in the header
+    if (dashboardTitleEl) {
+        dashboardTitleEl.textContent = settings.dashboardTitle;
+    }
+
+    // Update the primary color CSS variable
+    document.documentElement.style.setProperty('--primary-color', settings.primaryColor);
+}
+
+// Data Management Functions
+function exportData() {
+    // Create a data object with all user data
+    const data = {
+        bookmarks,
+        githubRepos,
+        settings,
+        exportDate: new Date().toISOString()
+    };
+
+    // Convert to JSON string
+    const jsonData = JSON.stringify(data, null, 2);
+
+    // Create download link
+    const blob = new Blob([jsonData], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    // Format date as YYYY-MM-DD
+    const today = new Date();
+    const dateString = today.toISOString().split('T')[0]; // Gets YYYY-MM-DD format
+
+    // Create a temporary link and trigger download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `homepage-data-${dateString}.json`;
+    document.body.appendChild(a);
+    a.click();
+
+    // Clean up
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 100);
+}
+
+function importData(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+        try {
+            const data = JSON.parse(event.target.result);
+
+            // Validate the data structure
+            if (!data.bookmarks || !data.settings || !data.githubRepos) {
+                throw new Error('Invalid data format');
+            }
+
+            // Confirm before overwriting current data
+            if (confirm('This will replace all your current data. Continue?')) {
+                // Update data structures
+                bookmarks = data.bookmarks;
+                githubRepos = data.githubRepos;
+                settings = data.settings;
+
+                // Save to localStorage
+                saveBookmarks();
+                saveGithubRepos();
+                localStorage.setItem('settings', JSON.stringify(settings));
+
+                // Apply changes
+                renderAll();
+                applySettings();
+
+                alert('Data imported successfully!');
+            }
+        } catch (error) {
+            console.error('Error importing data:', error);
+            alert('Failed to import data. Please check the file format.');
+        }
+
+        // Reset the file input
+        e.target.value = '';
+    };
+
+    reader.readAsText(file);
+}
+
+// Reset all data
+function resetData() {
+    if (confirm('WARNING: This will permanently delete all your bookmarks, repositories, and settings. This action cannot be undone.\n\nDo you want to proceed?')) {
+        // Clear data structures
+        bookmarks = [];
+        githubRepos = [];
+        
+        // Reset settings to defaults
+        settings = {
+            pageTitle: 'My Bookmarks',
+            dashboardTitle: 'My Dashboard',
+            primaryColor: '#4285f4'
+        };
+        
+        // Clear localStorage
+        localStorage.removeItem('bookmarks');
+        localStorage.removeItem('githubRepos');
+        localStorage.setItem('settings', JSON.stringify(settings));
+        
+        // Update UI
+        renderAll();
+        applySettings();
+        
+        // Close modal and show notification
+        closeModals();
+        alert('All data has been reset successfully.');
+    }
 }

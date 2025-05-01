@@ -24,8 +24,9 @@
 
         <main class="main-content">
             <header>
-                <h1>My Dashboard</h1>
+                <h1 id="dashboard-title">My Dashboard</h1>
                 <div class="actions">
+                    <button id="settings-btn" class="btn"><i class="fas fa-cog"></i> Settings</button>
                     <button id="add-github" class="btn"><i class="fab fa-github"></i> Add GitHub Repo</button>
                 </div>
             </header>
@@ -73,6 +74,48 @@
                 </div>
                 <button type="submit" class="btn">Add Repository</button>
             </form>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Settings</h2>
+            <form id="settings-form">
+                <div class="form-group">
+                    <label for="page-title">Page Title</label>
+                    <input type="text" id="page-title" placeholder="My Bookmarks">
+                </div>
+                <div class="form-group">
+                    <label for="dashboard-title-input">Dashboard Title</label>
+                    <input type="text" id="dashboard-title-input" placeholder="My Dashboard">
+                </div>
+                <div class="form-group">
+                    <label for="primary-color">Primary Color</label>
+                    <input type="color" id="primary-color" value="#4285f4">
+                </div>
+                <button type="submit" class="btn">Save Settings</button>
+            </form>
+
+            <hr class="settings-divider">
+
+            <div class="data-management">
+                <h3>Data Management</h3>
+                <div class="data-buttons">
+                    <button id="export-data" class="btn"><i class="fas fa-download"></i> Export Data</button>
+                    <div class="import-container">
+                        <label for="import-data" class="btn import-label">
+                            <i class="fas fa-upload"></i> Import Data
+                        </label>
+                        <input type="file" id="import-data" accept=".json" style="display: none;">
+                    </div>
+                </div>
+                <div class="reset-section">
+                    <button id="reset-data" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Reset All Data</button>
+                    <p class="reset-warning">This will permanently delete all bookmarks, repositories, and settings.</p>
+                </div>
+            </div>
         </div>
     </div>
 
