@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GitHub Bookmarks</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <header>
+    <h1>New Tab</h1>
+    <button id="settings-toggle-btn" title="Settings">⚙️</button>
+  </header>
+
+  <section id="settings-section" class="hidden">
+    <h2>Settings</h2>
+    <div class="add-repo-form">
+      <label for="new-repo-url">Add Repository URL:</label>
+      <input type="text" id="new-repo-url" placeholder="https://github.com/owner/repo">
+      <button id="add-repo-btn">Add</button>
+    </div>
+    <p id="error-message" class="error"></p>
+    <button id="clear-all-btn" class="danger">Clear All Bookmarks</button>
+  </section>
+
+  <main id="repo-list-container">
+    <!-- Repository cards will be inserted here by JavaScript -->
+  </main>
+
+  <div id="no-repos-message" class="hidden">
+    <p>No repositories bookmarked yet.</p>
+    <button id="add-first-repo-btn">Add Repository</button>
+  </div>
+
+  <footer>
+    <p>Brutalist GitHub Bookmarks • <span id="current-year"></span></p>
+  </footer>
+
+  <!-- Template for repository card -->
+  <template id="repo-card-template">
+    <div class="repo-card">
+      <div class="card-header">
+        <h3 class="repo-name"></h3>
+        <button class="remove-repo-btn" title="Remove">🗑️</button>
+      </div>
+      <div class="card-links">
+        <a href="#" target="_blank" rel="noopener noreferrer" class="repo-link code-link">Code</a>
+        <a href="#" target="_blank" rel="noopener noreferrer" class="repo-link issues-link">Issues</a>
+        <a href="#" target="_blank" rel="noopener noreferrer" class="repo-link prs-link">PRs</a>
+        <a href="#" target="_blank" rel="noopener noreferrer" class="repo-link discussions-link">Discussions</a>
+        <a href="#" target="_blank" rel="noopener noreferrer" class="repo-link actions-link">Actions</a>
+        <a href="#" target="_blank" rel="noopener noreferrer" class="repo-link projects-link">Projects</a>
+      </div>
+    </div>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
