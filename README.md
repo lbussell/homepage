@@ -1,17 +1,11 @@
 # Homepage
 
-Useful links for me
+## What is this?
 
-## How to run
+This is a configurable new tab page that shows links to GitHub/Azure Devops repos and custom bookmarks.
 
-### Run 
+It is deployed at https://lbussell.github.io/homepage/.
 
-```sh
-> npm run dev
-```
+## How to use it
 
-### Build
-
-```sh
-> npm run build
-```
+Use the [New Tab Redirect](https://chromewebstore.google.com/detail/new-tab-redirect/icpgjfneehieebagbmdbhnlpiopdcmna) browser extension to set your new tab page to https://lbussell.github.io/homepage/.
