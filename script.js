@@ -217,20 +217,33 @@ function renderGithubRepos(reposToRender) {
         const githubUrl = `https://github.com/${repo.owner}/${repo.repo}`;
         let azureDevOpsUrl = '';
         let pipelinesUrl = '';
-
+        
         if (repo.isAzureDevOps) {
             azureDevOpsUrl = `https://dev.azure.com/${repo.azureOrg}/${repo.azureRepo}/_git/${repo.azureRepo}`;
             pipelinesUrl = repo.azurePipelines || `https://dev.azure.com/${repo.azureOrg}/${repo.azureRepo}/_build`;
+            card.className += ' has-azure-devops';
+        }
+
+        // Create badge with appropriate icon
+        const ownerBadgeContent = `<i class="fab fa-github"></i> ${repo.owner}`;
+        
+        // Create Azure DevOps badge if needed
+        let azureBadgeContent = '';
+        if (repo.isAzureDevOps) {
+            azureBadgeContent = `<span class="owner-badge azure-owner-badge"><i class="fab fa-microsoft"></i> ${repo.azureOrg}</span>`;
         }
 
         card.innerHTML = `
             <div class="github-header">
-                <span class="github-logo">
-                    <i class="fab fa-github"></i>
-                </span>
-                <a href="${githubUrl}" class="github-title" target="_blank">
-                    ${repo.owner}/${repo.repo}
-                </a>
+                <div class="repo-title-container">
+                    <a href="${githubUrl}" class="github-title" target="_blank">
+                        ${repo.repo}
+                    </a>
+                    <div class="badges-container">
+                        <span class="owner-badge">${ownerBadgeContent}</span>
+                        ${azureBadgeContent}
+                    </div>
+                </div>
                 <div class="bookmark-actions">
                     <button class="action-btn delete-github" data-id="${repo.id}">
                         <i class="fas fa-trash"></i>

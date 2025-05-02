@@ -233,9 +233,10 @@ content {
 .github-title {
     font-size: 18px;
     font-weight: 600;
-    flex-grow: 1;
     text-decoration: none;
     color: var(--text-color);
+    display: block;
+    line-height: 1.3;
 }
 
 .github-links {
@@ -533,4 +534,45 @@ input[type="color"] {
         width: 100%;
         justify-content: center;
     }
+}
+
+.repo-title-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.owner-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    background-color: #f0f0f0;
+    color: #666;
+    padding: 3px 10px;
+    border-radius: 14px;
+    margin-top: 4px;
+    font-weight: 600;
+    max-width: fit-content;
+}
+
+.owner-badge i {
+    margin-right: 5px;
+    font-size: 11px;
+    color: #333;
+}
+
+.badges-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.azure-owner-badge {
+    background-color: rgba(0, 120, 212, 0.1);
+    color: #0078d4;
+}
+
+.azure-owner-badge i {
+    color: #0078d4;
 }
