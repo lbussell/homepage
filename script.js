@@ -260,15 +260,6 @@ function renderGithubRepos(reposToRender) {
         // Add Azure DevOps-specific links if this repo has Azure DevOps
         if (repo.isAzureDevOps) {
 
-            // Only add pipelines link if it was explicitly provided
-            if (repo.azurePipelines) {
-                card.querySelector('.github-links').innerHTML += `
-                    <a href="${repo.azurePipelines}" class="github-link azure-link" target="_blank">
-                        <i class="fas fa-play-circle"></i> Pipelines
-                    </a>
-                `;
-            }
-
             // Only add internal pipelines link if it was explicitly provided
             if (repo.azurePipelinesInternal) {
                 card.querySelector('.github-links').innerHTML += `
@@ -311,7 +302,7 @@ function closeModals() {
 
     // Reset modal titles
     document.querySelector('#github-modal h2').textContent = 'Add Repository';
-    
+
     // Reset forms
     bookmarkForm.reset();
     githubForm.reset();
@@ -370,14 +361,12 @@ function addGithubRepo(e) {
 
     let azureOrg = '';
     let azureRepo = '';
-    let azurePipelines = '';
     let azurePipelinesInternal = '';
     let azurePipelinesPublic = '';
 
     if (isAzureDevOps) {
         azureOrg = document.getElementById('azure-org').value;
         azureRepo = document.getElementById('azure-repo').value;
-        azurePipelines = document.getElementById('azure-pipelines').value;
         azurePipelinesInternal = document.getElementById('azure-pipelines-internal').value;
         azurePipelinesPublic = document.getElementById('azure-pipelines-public').value;
     }
@@ -391,7 +380,6 @@ function addGithubRepo(e) {
         isAzureDevOps,
         azureOrg,
         azureRepo,
-        azurePipelines,
         azurePipelinesInternal,
         azurePipelinesPublic
     };
@@ -494,7 +482,6 @@ function editGithubRepo(id) {
             azureFieldsGroup.style.display = 'block';
             document.getElementById('azure-org').value = repo.azureOrg || '';
             document.getElementById('azure-repo').value = repo.azureRepo || '';
-            document.getElementById('azure-pipelines').value = repo.azurePipelines || '';
             document.getElementById('azure-pipelines-internal').value = repo.azurePipelinesInternal || '';
             document.getElementById('azure-pipelines-public').value = repo.azurePipelinesPublic || '';
         } else {
@@ -535,14 +522,12 @@ function updateGithubRepo(e) {
 
     let azureOrg = '';
     let azureRepo = '';
-    let azurePipelines = '';
     let azurePipelinesInternal = '';
     let azurePipelinesPublic = '';
 
     if (isAzureDevOps) {
         azureOrg = document.getElementById('azure-org').value;
         azureRepo = document.getElementById('azure-repo').value;
-        azurePipelines = document.getElementById('azure-pipelines').value;
         azurePipelinesInternal = document.getElementById('azure-pipelines-internal').value;
         azurePipelinesPublic = document.getElementById('azure-pipelines-public').value;
     }
@@ -558,7 +543,6 @@ function updateGithubRepo(e) {
             isAzureDevOps,
             azureOrg,
             azureRepo,
-            azurePipelines,
             azurePipelinesInternal,
             azurePipelinesPublic
         };
