@@ -169,9 +169,6 @@ function renderBookmarks(bookmarksToRender) {
                 <button class="action-btn edit-bookmark" data-id="${bookmark.id}">
                     <i class="fas fa-edit"></i>
                 </button>
-                <button class="action-btn delete-bookmark" data-id="${bookmark.id}">
-                    <i class="fas fa-trash"></i>
-                </button>
             </div>
         `;
 
@@ -188,11 +185,6 @@ function renderBookmarks(bookmarksToRender) {
         bookmarkItem.querySelector('.edit-bookmark').addEventListener('click', (e) => {
             e.stopPropagation();
             editBookmark(bookmark.id);
-        });
-
-        bookmarkItem.querySelector('.delete-bookmark').addEventListener('click', (e) => {
-            e.stopPropagation();
-            deleteBookmark(bookmark.id);
         });
     });
 }
@@ -242,8 +234,8 @@ function renderGithubRepos(reposToRender) {
                     </div>
                 </div>
                 <div class="bookmark-actions">
-                    <button class="action-btn delete-github" data-id="${repo.id}">
-                        <i class="fas fa-trash"></i>
+                    <button class="action-btn edit-github" data-id="${repo.id}">
+                        <i class="fas fa-edit"></i>
                     </button>
                 </div>
             </div>
@@ -302,8 +294,8 @@ function renderGithubRepos(reposToRender) {
 
         reposContainer.appendChild(card);
 
-        // Add event listener for delete
-        card.querySelector('.delete-github').addEventListener('click', () => deleteGithubRepo(repo.id));
+        // Add event listeners for actions
+        card.querySelector('.edit-github').addEventListener('click', () => editGithubRepo(repo.id));
     });
 }
 
@@ -316,9 +308,29 @@ function closeModals() {
     bookmarkModal.style.display = 'none';
     githubModal.style.display = 'none';
     settingsModal.style.display = 'none';
+
+    // Reset modal titles
+    document.querySelector('#github-modal h2').textContent = 'Add Repository';
+    
+    // Reset forms
     bookmarkForm.reset();
     githubForm.reset();
     settingsForm.reset();
+
+    // Hide delete buttons when closing modals
+    document.getElementById('delete-bookmark-btn').style.display = 'none';
+    document.getElementById('delete-github-btn').style.display = 'none';
+
+    // Reset the form's button text if it was in edit mode
+    if (bookmarkForm.dataset.mode === 'edit') {
+        bookmarkForm.querySelector('button[type="submit"]').textContent = 'Save Bookmark';
+        bookmarkForm.dataset.mode = 'add';
+    }
+
+    if (githubForm.dataset.mode === 'edit') {
+        githubForm.querySelector('button[type="submit"]').textContent = 'Add Repository';
+        githubForm.dataset.mode = 'add';
+    }
 }
 
 // Add bookmark
@@ -406,6 +418,14 @@ function editBookmark(id) {
         // Change submit button text
         bookmarkForm.querySelector('button[type="submit"]').textContent = 'Update Bookmark';
 
+        // Show delete button and add event listener
+        const deleteBtn = document.getElementById('delete-bookmark-btn');
+        deleteBtn.style.display = 'flex';
+        deleteBtn.onclick = () => {
+            deleteBookmark(id);
+            closeModals();
+        };
+
         // Add event listener for edit mode
         bookmarkForm.removeEventListener('submit', addBookmark);
         bookmarkForm.addEventListener('submit', updateBookmark);
@@ -450,6 +470,108 @@ function updateBookmark(e) {
     bookmarkForm.removeEventListener('submit', updateBookmark);
     bookmarkForm.addEventListener('submit', addBookmark);
     bookmarkForm.querySelector('button[type="submit"]').textContent = 'Save Bookmark';
+
+    closeModals();
+}
+
+// Edit GitHub repo
+function editGithubRepo(id) {
+    const repo = githubRepos.find(r => r.id === id);
+
+    if (repo) {
+        // Update modal title to indicate editing mode
+        document.querySelector('#github-modal h2').textContent = `Editing ${repo.owner}/${repo.repo}`;
+
+        // Populate form with existing values
+        document.getElementById('github-owner').value = repo.owner;
+        document.getElementById('github-repo').value = repo.repo;
+
+        const isAzureDevOps = repo.isAzureDevOps || false;
+        document.getElementById('is-azure-devops').checked = isAzureDevOps;
+
+        // Toggle Azure DevOps fields display
+        if (isAzureDevOps) {
+            azureFieldsGroup.style.display = 'block';
+            document.getElementById('azure-org').value = repo.azureOrg || '';
+            document.getElementById('azure-repo').value = repo.azureRepo || '';
+            document.getElementById('azure-pipelines').value = repo.azurePipelines || '';
+            document.getElementById('azure-pipelines-internal').value = repo.azurePipelinesInternal || '';
+            document.getElementById('azure-pipelines-public').value = repo.azurePipelinesPublic || '';
+        } else {
+            azureFieldsGroup.style.display = 'none';
+        }
+
+        // Convert form to edit mode
+        githubForm.dataset.mode = 'edit';
+        githubForm.dataset.id = id;
+
+        // Change submit button text
+        githubForm.querySelector('button[type="submit"]').textContent = 'Update Repository';
+
+        // Show delete button and add event listener
+        const deleteBtn = document.getElementById('delete-github-btn');
+        deleteBtn.style.display = 'flex';
+        deleteBtn.onclick = () => {
+            deleteGithubRepo(id);
+            closeModals();
+        };
+
+        // Add event listener for edit mode
+        githubForm.removeEventListener('submit', addGithubRepo);
+        githubForm.addEventListener('submit', updateGithubRepo);
+
+        openModal(githubModal);
+    }
+}
+
+// Update GitHub repo
+function updateGithubRepo(e) {
+    e.preventDefault();
+
+    const id = parseInt(githubForm.dataset.id);
+    const owner = document.getElementById('github-owner').value;
+    const repo = document.getElementById('github-repo').value;
+    const isAzureDevOps = document.getElementById('is-azure-devops').checked;
+
+    let azureOrg = '';
+    let azureRepo = '';
+    let azurePipelines = '';
+    let azurePipelinesInternal = '';
+    let azurePipelinesPublic = '';
+
+    if (isAzureDevOps) {
+        azureOrg = document.getElementById('azure-org').value;
+        azureRepo = document.getElementById('azure-repo').value;
+        azurePipelines = document.getElementById('azure-pipelines').value;
+        azurePipelinesInternal = document.getElementById('azure-pipelines-internal').value;
+        azurePipelinesPublic = document.getElementById('azure-pipelines-public').value;
+    }
+
+    const index = githubRepos.findIndex(r => r.id === id);
+
+    if (index !== -1) {
+        githubRepos[index] = {
+            ...githubRepos[index],
+            owner,
+            repo,
+            title: `${owner}/${repo}`,
+            isAzureDevOps,
+            azureOrg,
+            azureRepo,
+            azurePipelines,
+            azurePipelinesInternal,
+            azurePipelinesPublic
+        };
+
+        saveGithubRepos();
+        renderGithubRepos(githubRepos);
+    }
+
+    // Reset form to add mode
+    githubForm.dataset.mode = 'add';
+    githubForm.removeEventListener('submit', updateGithubRepo);
+    githubForm.addEventListener('submit', addGithubRepo);
+    githubForm.querySelector('button[type="submit"]').textContent = 'Add Repository';
 
     closeModals();
 }

@@ -120,11 +120,13 @@ body {
 
 .bookmark-actions {
     display: flex;
-    opacity: 0;
+    opacity: 0; /* Hide by default */
+    transition: opacity 0.15s ease;
 }
 
-.bookmark-item:hover .bookmark-actions {
-    opacity: 1;
+.bookmark-item:hover .bookmark-actions,
+.github-card:hover .bookmark-actions {
+    opacity: 1; /* Show on hover */
 }
 
 .action-btn {
@@ -612,4 +614,20 @@ input[type="color"] {
 
 .azure-owner-badge:hover {
     background-color: rgba(0, 120, 212, 0.2);
+}
+
+/* Form Actions Styles */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: space-between;
+}
+
+.form-actions button:first-child {
+    flex-grow: 2;
+}
+
+.form-actions button:last-child {
+    flex-grow: 1;
 }

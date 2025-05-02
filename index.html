@@ -53,7 +53,10 @@
                     <label for="bookmark-url">URL</label>
                     <input type="url" id="bookmark-url" required>
                 </div>
-                <button type="submit" class="btn btn-action">Save Bookmark</button>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-action">Save Bookmark</button>
+                    <button type="button" id="delete-bookmark-btn" class="btn btn-danger" style="display: none;">Delete Bookmark</button>
+                </div>
             </form>
         </div>
     </div>
@@ -98,7 +101,10 @@
                         <input type="url" id="azure-pipelines-public" placeholder="https://dev.azure.com/organization/project/_build">
                     </div>
                 </div>
-                <button type="submit" class="btn btn-action">Add Repository</button>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-action">Add Repository</button>
+                    <button type="button" id="delete-github-btn" class="btn btn-danger" style="display: none;">Delete Repository</button>
+                </div>
             </form>
         </div>
     </div>
