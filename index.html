@@ -1,14 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/src/bulma.min.css">
-    <title>New Tab</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookmarks</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Bookmarks</h2>
+                <button id="add-bookmark" class="btn-small btn-action"><i class="fas fa-plus"></i> Add</button>
+            </div>
+            <div class="search-container">
+                <input type="text" id="search-input" placeholder="Search bookmarks...">
+            </div>
+            <div id="bookmarks-list" class="bookmarks-list">
+                <!-- Bookmarks will be added here dynamically -->
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <h1 id="dashboard-title">My Dashboard</h1>
+                <div class="actions">
+                    <button id="settings-btn" class="btn"><i class="fas fa-cog"></i> Settings</button>
+                    <button id="add-github" class="btn btn-action"><i class="fas fa-plus"></i> Add repo</button>
+                </div>
+            </header>
+
+            <div class="content">
+                <div class="repo-grid" id="repos-container">
+                    <!-- GitHub repos will be added here dynamically -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Bookmark Modal -->
+    <div id="bookmark-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add Bookmark</h2>
+            <form id="bookmark-form">
+                <div class="form-group">
+                    <label for="bookmark-title">Title</label>
+                    <input type="text" id="bookmark-title" required>
+                </div>
+                <div class="form-group">
+                    <label for="bookmark-url">URL</label>
+                    <input type="url" id="bookmark-url" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-action">Save Bookmark</button>
+                    <button type="button" id="delete-bookmark-btn" class="btn btn-danger" style="display: none;">Delete Bookmark</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- GitHub Modal -->
+    <div id="github-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add Repository</h2>
+            <form id="github-form">
+                <div class="form-group">
+                    <label for="github-owner">GitHub Owner/Organization</label>
+                    <input type="text" id="github-owner" required>
+                </div>
+                <div class="form-group">
+                    <label for="github-repo">GitHub Repository Name</label>
+                    <input type="text" id="github-repo" required>
+                </div>
+                <div class="form-group checkbox-group">
+                    <input type="checkbox" id="is-azure-devops">
+                    <label for="is-azure-devops">Include Azure DevOps links</label>
+                </div>
+                <div id="azure-fields-group" style="display: none;">
+                    <div class="form-group">
+                        <label for="azure-org">Azure DevOps Organization</label>
+                        <input type="text" id="azure-org" placeholder="contoso">
+                    </div>
+                    <div class="form-group">
+                        <label for="azure-repo">Azure DevOps Repository</label>
+                        <input type="text" id="azure-repo" placeholder="my-project">
+                    </div>
+                    <div class="form-group">
+                        <label for="azure-pipelines-internal">Internal Pipelines URL (Optional)</label>
+                        <input type="url" id="azure-pipelines-internal" placeholder="https://internal-dev.azure.com/organization/project/_build">
+                    </div>
+                    <div class="form-group">
+                        <label for="azure-pipelines-public">Public Pipelines URL (Optional)</label>
+                        <input type="url" id="azure-pipelines-public" placeholder="https://dev.azure.com/organization/project/_build">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="delete-github-btn" class="btn btn-danger" style="display: none;">Delete Repository</button>
+                    <button type="submit" class="btn btn-action">Add Repository</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Settings</h2>
+            <form id="settings-form">
+                <div class="form-group">
+                    <label for="page-title">Page Title</label>
+                    <input type="text" id="page-title" placeholder="My Bookmarks">
+                </div>
+                <div class="form-group">
+                    <label for="dashboard-title-input">Dashboard Title</label>
+                    <input type="text" id="dashboard-title-input" placeholder="My Dashboard">
+                </div>
+                <button type="submit" class="btn">Save Settings</button>
+            </form>
+
+            <hr class="settings-divider">
+
+            <div class="data-management">
+                <h3>Data Management</h3>
+                <div class="data-buttons">
+                    <button id="export-data" class="btn"><i class="fas fa-download"></i> Export Data</button>
+                    <div class="import-container">
+                        <label for="import-data" class="btn import-label">
+                            <i class="fas fa-upload"></i> Import Data
+                        </label>
+                        <input type="file" id="import-data" accept=".json" style="display: none;">
+                    </div>
+                </div>
+                <div class="reset-section">
+                    <button id="reset-data" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Reset All Data</button>
+                    <p class="reset-warning">This will permanently delete all bookmarks, repositories, and settings.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
 </html>

@@ -1,0 +1,634 @@
+:root {
+    --primary-color: #32383f;
+    --secondary-color: #24292e;
+    --background-color: #f5f5f5;
+    --sidebar-background: #ffffff;
+    --card-background: #ffffff;
+    --text-color: #333333;
+    --icon-color: #59636e;
+    --border-radius: 8px;
+    --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --transition: all 0.15s ease;
+    --sidebar-width: 280px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-background);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.sidebar-header {
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+
+.sidebar .search-container {
+    padding: 10px 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.sidebar .search-container input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 14px;
+}
+
+.bookmarks-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 6px;
+}
+
+.bookmark-item {
+    display: flex;
+    align-items: center;
+    padding: 7px 10px;
+    border-radius: var(--border-radius);
+    margin-bottom: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-color);
+    background-color: #f0f0f0;
+    transition: background-color 0.15s ease;
+}
+
+.bookmark-item:hover {
+    background-color: #e0e0e0;
+}
+
+.bookmark-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    margin-right: 12px;
+    color: var(--icon-color);
+    flex-shrink: 0;
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.bookmark-icon img {
+    max-width: 16px;
+    max-height: 16px;
+    object-fit: contain;
+}
+
+.bookmark-info {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+.bookmark-title {
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+
+.bookmark-actions {
+    display: flex;
+    opacity: 0; /* Hide by default */
+    transition: opacity 0.15s ease;
+}
+
+.bookmark-item:hover .bookmark-actions,
+.github-card:hover .bookmark-actions {
+    opacity: 1; /* Show on hover */
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--icon-color);
+    margin-left: 5px;
+}
+
+.action-btn:hover {
+    color: var(--primary-color);
+}
+
+/* Main Content Styles */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: var(--primary-color);
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+content {
+    margin-top: 20px;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    background-color: #e0e0e0;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.tab-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.repo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* GitHub Card Styles */
+.github-card {
+    background-color: var(--card-background);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    padding: 20px;
+    transition: var(--transition);
+}
+
+.github-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.github-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.github-logo {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: white;
+    transition: var(--transition);
+    background-color: var(--secondary-color);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.github-title {
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text-color);
+    display: block;
+    line-height: 1.3;
+}
+
+.github-links {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+}
+
+.github-link {
+    padding: 6px 12px;
+    background-color: #f0f0f0;
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.github-link i {
+    color: var(--icon-color);
+}
+
+.github-link:hover {
+    background-color: #e0e0e0;
+    color: var(--text-color);
+}
+
+.github-link:hover i {
+    color: var(--icon-color);
+}
+
+.azure-link:hover {
+    background-color: rgba(0, 120, 212, 0.2);
+    color: #0078d4;
+}
+
+.azure-link:hover i {
+    color: #0078d4;
+}
+
+/* Button Styles */
+.btn {
+    padding: 6px 12px;
+    background-color: transparent;
+    color: var(--primary-color);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.15s ease, color 0.15s ease, border 0.15s ease;
+}
+
+/* Action buttons with subtle outline */
+.btn-action {
+    border: 1px solid rgba(50, 56, 63, 0.2); /* subtle outline using primary color with low opacity */
+}
+
+.btn-small {
+    padding: 4px 8px;
+    background-color: transparent;
+    color: var(--primary-color);
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.btn:hover, .btn-small:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn i, .btn-small i {
+    color: var(--primary-color);
+}
+
+.btn:hover i, .btn-small:hover i {
+    color: white;
+}
+
+.btn-danger {
+    background-color: transparent;
+    color: #dc3545;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--card-background);
+    padding: 30px;
+    border-radius: var(--border-radius);
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close:hover {
+    color: var(--primary-color);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+input[type="text"],
+input[type="url"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    font-size: 16px;
+}
+
+input[type="color"] {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+}
+
+/* Checkbox Styling */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.checkbox-group label {
+    display: inline;
+    cursor: pointer;
+}
+
+/* Azure DevOps specific styling */
+#azure-url-group {
+    padding: 10px;
+    background-color: rgba(0, 120, 212, 0.05);
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    border-left: 4px solid #0078d4;
+}
+
+#azure-fields-group {
+    padding: 10px;
+    background-color: rgba(0, 120, 212, 0.05);
+    margin-bottom: 20px;
+    border-left: 4px solid #0078d4;
+}
+
+.has-azure-devops {
+    position: relative;
+}
+
+.azure-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0078d4;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    margin-left: 8px;
+    padding: 2px;
+}
+
+.azure-link {
+    background-color: rgba(0, 120, 212, 0.1);
+}
+
+.azure-link:hover {
+    background-color: rgba(0, 120, 212, 0.2);
+}
+
+.azure-link i {
+    color: #0078d4;
+}
+
+.azure-link:hover i {
+    color: #0078d4;
+}
+
+.fa-microsoft {
+    color: #0078d4;
+}
+
+/* Settings Modal Styles */
+.settings-divider {
+    margin: 20px 0;
+    border: none;
+    border-top: 1px solid #eee;
+}
+
+.data-management {
+    margin-top: 20px;
+}
+
+.data-management h3 {
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+.data-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.import-label {
+    display: inline-block;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* Responsive adjustments for data management buttons */
+@media (max-width: 768px) {
+    .data-buttons {
+        flex-direction: column;
+    }
+}
+
+.reset-section {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: rgba(220, 53, 69, 0.1);
+    border-radius: var(--border-radius);
+    border-left: 4px solid #dc3545;
+}
+
+.reset-warning {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #dc3545;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        max-height: 50vh;
+    }
+
+    .main-content {
+        padding: 15px;
+    }
+
+    .repo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .actions {
+        width: 100%;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+.repo-title-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.owner-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 12px;
+    background-color: #f0f0f0;
+    color: #666;
+    padding: 3px 10px;
+    border-radius: 14px;
+    margin-top: 4px;
+    font-weight: 600;
+    max-width: fit-content;
+}
+
+.owner-badge i {
+    margin-right: 5px;
+    font-size: 11px;
+    color: #333;
+}
+
+.badges-container {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+}
+
+.azure-owner-badge {
+    background-color: rgba(0, 120, 212, 0.1);
+    color: #0078d4;
+}
+
+.azure-owner-badge i {
+    color: #0078d4;
+}
+
+.badge-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.owner-badge:hover {
+    background-color: #e0e0e0;
+    cursor: pointer;
+}
+
+.azure-owner-badge:hover {
+    background-color: rgba(0, 120, 212, 0.2);
+}
+
+/* Form Actions Styles */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: flex-end;
+}
+
+.form-actions button {
+    width: auto;
+    flex-grow: 0;
+}
