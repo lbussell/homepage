@@ -252,7 +252,7 @@ function renderGithubRepos(reposToRender) {
                     <i class="fas fa-exclamation-circle"></i> Issues
                 </a>
                 <a href="${githubUrl}/pulls" class="github-link" target="_blank">
-                    <i class="fas fa-code-branch"></i> PRs
+                    <i class="fas fa-code-branch"></i> Pulls
                 </a>
                 <a href="${githubUrl}/actions" class="github-link" target="_blank">
                     <i class="fas fa-play-circle"></i> Actions
@@ -267,10 +267,6 @@ function renderGithubRepos(reposToRender) {
 
         // Add Azure DevOps-specific links if this repo has Azure DevOps
         if (repo.isAzureDevOps) {
-            card.querySelector('.github-links').innerHTML += `
-                <a href="${azureDevOpsUrl}/pullrequests" class="github-link azure-link" target="_blank">
-                    <i class="fas fa-code-branch"></i> Azure PRs
-                </a>`;
 
             // Only add pipelines link if it was explicitly provided
             if (repo.azurePipelines) {
@@ -285,7 +281,7 @@ function renderGithubRepos(reposToRender) {
             if (repo.azurePipelinesInternal) {
                 card.querySelector('.github-links').innerHTML += `
                     <a href="${repo.azurePipelinesInternal}" class="github-link azure-link" target="_blank">
-                        <i class="fas fa-play-circle"></i> Internal Pipelines
+                        <i class="fas fa-play-circle"></i> Pipelines (Internal)
                     </a>
                 `;
             }
@@ -294,7 +290,7 @@ function renderGithubRepos(reposToRender) {
             if (repo.azurePipelinesPublic) {
                 card.querySelector('.github-links').innerHTML += `
                     <a href="${repo.azurePipelinesPublic}" class="github-link azure-link" target="_blank">
-                        <i class="fas fa-play-circle"></i> Public Pipelines
+                        <i class="fas fa-play-circle"></i> Pipelines (Public)
                     </a>
                 `;
             }

@@ -241,12 +241,12 @@ content {
 
 .github-links {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    grid-template-columns: 1fr;
+    gap: 8px;
 }
 
 .github-link {
-    padding: 8px 12px;
+    padding: 6px 12px;
     background-color: #f0f0f0;
     border-radius: var(--border-radius);
     color: var(--text-color);
@@ -281,29 +281,35 @@ content {
 
 /* Button Styles */
 .btn {
-    padding: 10px 15px;
+    padding: 6px 12px;
     background-color: transparent;
     color: var(--primary-color);
-    border: 1px solid var(--primary-color);
+    border: none;
     border-radius: var(--border-radius);
     cursor: pointer;
     font-size: 16px;
     display: flex;
     align-items: center;
     gap: 5px;
+    transition: background-color 0.15s ease, color 0.15s ease, border 0.15s ease;
+}
+
+/* Action buttons with subtle outline */
+.btn-action {
+    border: 1px solid rgba(50, 56, 63, 0.2); /* subtle outline using primary color with low opacity */
 }
 
 .btn-small {
-    padding: 6px 12px;
+    padding: 4px 8px;
     background-color: transparent;
     color: var(--primary-color);
-    border: 1px solid var(--primary-color);
     border-radius: var(--border-radius);
     cursor: pointer;
     font-size: 14px;
     display: flex;
     align-items: center;
     gap: 5px;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .btn:hover, .btn-small:hover {
@@ -322,19 +328,11 @@ content {
 .btn-danger {
     background-color: transparent;
     color: #dc3545;
-    border-color: #dc3545;
+    border: none;
 }
 
 .btn-danger:hover {
     background-color: #dc3545;
-    color: white;
-}
-
-.btn-danger i {
-    color: #dc3545;
-}
-
-.btn-danger:hover i {
     color: white;
 }
 
