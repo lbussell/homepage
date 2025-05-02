@@ -375,6 +375,78 @@ input[type="color"] {
     cursor: pointer;
 }
 
+/* Checkbox Styling */
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.checkbox-group label {
+    display: inline;
+    cursor: pointer;
+}
+
+/* Azure DevOps specific styling */
+#azure-url-group {
+    padding: 10px;
+    background-color: rgba(0, 120, 212, 0.05);
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    border-left: 4px solid #0078d4;
+}
+
+#azure-fields-group {
+    padding: 10px;
+    background-color: rgba(0, 120, 212, 0.05);
+    border-radius: var(--border-radius);
+    margin-bottom: 20px;
+    border-left: 4px solid #0078d4;
+}
+
+.has-azure-devops {
+    position: relative;
+}
+
+.azure-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0078d4;
+    color: white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    margin-left: 8px;
+    padding: 2px;
+}
+
+.azure-link {
+    background-color: rgba(0, 120, 212, 0.1);
+}
+
+.azure-link:hover {
+    background-color: #0078d4;
+}
+
+.azure-link i {
+    color: #0078d4;
+}
+
+.azure-link:hover i {
+    color: white;
+}
+
+.fa-microsoft {
+    color: #0078d4;
+}
+
 /* Settings Modal Styles */
 .settings-divider {
     margin: 20px 0;

@@ -16,6 +16,8 @@ const exportDataBtn = document.getElementById('export-data');
 const importDataInput = document.getElementById('import-data');
 const resetDataBtn = document.getElementById('reset-data');
 const tabButtons = document.querySelectorAll('.tab-btn');
+const isAzureDevOpsCheckbox = document.getElementById('is-azure-devops');
+const azureFieldsGroup = document.getElementById('azure-fields-group');
 
 // Helper functions
 function extractDomain(url) {
@@ -57,6 +59,19 @@ function setupEventListeners() {
             button.classList.add('active');
             filterItems(button.dataset.tab);
         });
+    });
+
+    // Azure DevOps checkbox toggle
+    isAzureDevOpsCheckbox.addEventListener('change', () => {
+        if (isAzureDevOpsCheckbox.checked) {
+            azureFieldsGroup.style.display = 'block';
+            document.getElementById('azure-org').setAttribute('required', '');
+            document.getElementById('azure-repo').setAttribute('required', '');
+        } else {
+            azureFieldsGroup.style.display = 'none';
+            document.getElementById('azure-org').removeAttribute('required');
+            document.getElementById('azure-repo').removeAttribute('required');
+        }
     });
 
     // Search functionality
@@ -198,14 +213,22 @@ function renderGithubRepos(reposToRender) {
         card.className = 'github-card';
         card.dataset.id = repo.id;
 
-        const repoUrl = `https://github.com/${repo.owner}/${repo.repo}`;
+        // Determine repository URLs
+        const githubUrl = `https://github.com/${repo.owner}/${repo.repo}`;
+        let azureDevOpsUrl = '';
+        let pipelinesUrl = '';
+
+        if (repo.isAzureDevOps) {
+            azureDevOpsUrl = `https://dev.azure.com/${repo.azureOrg}/${repo.azureRepo}/_git/${repo.azureRepo}`;
+            pipelinesUrl = repo.azurePipelines || `https://dev.azure.com/${repo.azureOrg}/${repo.azureRepo}/_build`;
+        }
 
         card.innerHTML = `
             <div class="github-header">
                 <span class="github-logo">
                     <i class="fab fa-github"></i>
                 </span>
-                <a href="${repoUrl}" class="github-title" target="_blank">
+                <a href="${githubUrl}" class="github-title" target="_blank">
                     ${repo.owner}/${repo.repo}
                 </a>
                 <div class="bookmark-actions">
@@ -215,24 +238,45 @@ function renderGithubRepos(reposToRender) {
                 </div>
             </div>
             <div class="github-links">
-                <a href="${repoUrl}" class="github-link" target="_blank">
-                    <i class="fas fa-code"></i> Code
+                <a href="${githubUrl}" class="github-link" target="_blank">
+                    <i class="fas fa-code"></i> GitHub
                 </a>
-                <a href="${repoUrl}/issues" class="github-link" target="_blank">
+                <a href="${githubUrl}/issues" class="github-link" target="_blank">
                     <i class="fas fa-exclamation-circle"></i> Issues
                 </a>
-                <a href="${repoUrl}/pulls" class="github-link" target="_blank">
-                    <i class="fas fa-code-branch"></i> Pull Requests
+                <a href="${githubUrl}/pulls" class="github-link" target="_blank">
+                    <i class="fas fa-code-branch"></i> PRs
                 </a>
-                <a href="${repoUrl}/discussions" class="github-link" target="_blank">
+                <a href="${githubUrl}/actions" class="github-link" target="_blank">
+                    <i class="fas fa-play-circle"></i> Actions
+                </a>`;
+
+        // Add Azure DevOps-specific links if this repo has Azure DevOps
+        if (repo.isAzureDevOps) {
+            card.querySelector('.github-links').innerHTML += `
+                <a href="${azureDevOpsUrl}" class="github-link azure-link" target="_blank">
+                    <i class="fab fa-microsoft"></i> Azure
+                </a>
+                <a href="${azureDevOpsUrl}/pullrequests" class="github-link azure-link" target="_blank">
+                    <i class="fas fa-code-branch"></i> Azure PRs
+                </a>
+                <a href="${pipelinesUrl}" class="github-link azure-link" target="_blank">
+                    <i class="fas fa-play-circle"></i> Pipelines
+                </a>
+            `;
+        } else {
+            // Add remaining GitHub links for non-Azure repos
+            card.querySelector('.github-links').innerHTML += `
+                <a href="${githubUrl}/discussions" class="github-link" target="_blank">
                     <i class="fas fa-comments"></i> Discussions
                 </a>
-                <a href="${repoUrl}/actions" class="github-link" target="_blank">
-                    <i class="fas fa-play-circle"></i> Actions
-                </a>
-                <a href="${repoUrl}/projects" class="github-link" target="_blank">
+                <a href="${githubUrl}/projects" class="github-link" target="_blank">
                     <i class="fas fa-project-diagram"></i> Projects
                 </a>
+            `;
+        }
+
+        card.querySelector('.github-links').innerHTML += `
             </div>
         `;
 
@@ -290,13 +334,28 @@ function addGithubRepo(e) {
 
     const owner = document.getElementById('github-owner').value;
     const repo = document.getElementById('github-repo').value;
+    const isAzureDevOps = document.getElementById('is-azure-devops').checked;
+
+    let azureOrg = '';
+    let azureRepo = '';
+    let azurePipelines = '';
+
+    if (isAzureDevOps) {
+        azureOrg = document.getElementById('azure-org').value;
+        azureRepo = document.getElementById('azure-repo').value;
+        azurePipelines = document.getElementById('azure-pipelines').value;
+    }
 
     const newRepo = {
         id: Date.now(),
-        owner,
-        repo,
-        title: `${owner}/${repo}`,
-        type: 'github'
+        owner: isAzureDevOps ? azureOrg : owner,
+        repo: isAzureDevOps ? azureRepo : repo,
+        title: `${isAzureDevOps ? azureOrg : owner}/${isAzureDevOps ? azureRepo : repo}`,
+        type: 'github',
+        isAzureDevOps,
+        azureOrg,
+        azureRepo,
+        azurePipelines
     };
 
     githubRepos.push(newRepo);
