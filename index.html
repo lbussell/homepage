@@ -119,7 +119,7 @@
                     <label for="dashboard-title-input">Dashboard Title</label>
                     <input type="text" id="dashboard-title-input" placeholder="My Dashboard">
                 </div>
-                <button type="submit" class="btn">Save Settings</button>
+                <button type="submit" class="btn btn-action">Save Settings</button>
             </form>
 
             <hr class="settings-divider">
@@ -127,10 +127,12 @@
             <div class="data-management">
                 <h3>Data Management</h3>
                 <div class="data-buttons">
-                    <button id="export-data" class="btn"><i class="fas fa-download"></i> Export Data</button>
+                    <button id="export-data" class="btn btn-action">
+                        <i class="fas fa-upload"></i> Export Data
+                    </button>
                     <div class="import-container">
-                        <label for="import-data" class="btn import-label">
-                            <i class="fas fa-upload"></i> Import Data
+                        <label for="import-data" class="btn btn-action import-label">
+                            <i class="fas fa-download"></i> Import Data
                         </label>
                         <input type="file" id="import-data" accept=".json" style="display: none;">
                     </div>
