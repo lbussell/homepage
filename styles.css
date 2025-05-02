@@ -251,7 +251,6 @@ content {
     border-radius: var(--border-radius);
     color: var(--text-color);
     text-decoration: none;
-    transition: var(--transition);
     text-align: center;
     display: flex;
     align-items: center;
@@ -263,23 +262,31 @@ content {
 }
 
 .github-link:hover {
-    background-color: var(--primary-color);
-    color: white;
+    background-color: #e0e0e0;
+    color: var(--text-color);
 }
 
 .github-link:hover i {
-    color: #ffffffee;
+    color: var(--icon-color);
+}
+
+.azure-link:hover {
+    background-color: rgba(0, 120, 212, 0.2);
+    color: #0078d4;
+}
+
+.azure-link:hover i {
+    color: #0078d4;
 }
 
 /* Button Styles */
 .btn {
     padding: 10px 15px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
     border-radius: var(--border-radius);
     cursor: pointer;
-    transition: var(--transition);
     font-size: 16px;
     display: flex;
     align-items: center;
@@ -288,12 +295,11 @@ content {
 
 .btn-small {
     padding: 6px 12px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
     border-radius: var(--border-radius);
     cursor: pointer;
-    transition: var(--transition);
     font-size: 14px;
     display: flex;
     align-items: center;
@@ -301,20 +307,35 @@ content {
 }
 
 .btn:hover, .btn-small:hover {
-    opacity: 0.9;
-    transform: translateY(-1px);
+    background-color: var(--primary-color);
+    color: white;
 }
 
 .btn i, .btn-small i {
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--primary-color);
+}
+
+.btn:hover i, .btn-small:hover i {
+    color: white;
 }
 
 .btn-danger {
-    background-color: #dc3545;
+    background-color: transparent;
+    color: #dc3545;
+    border-color: #dc3545;
 }
 
 .btn-danger:hover {
-    background-color: #bd2130;
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-danger i {
+    color: #dc3545;
+}
+
+.btn-danger:hover i {
+    color: white;
 }
 
 /* Modal Styles */
@@ -437,7 +458,7 @@ input[type="color"] {
 }
 
 .azure-link:hover {
-    background-color: #0078d4;
+    background-color: rgba(0, 120, 212, 0.2);
 }
 
 .azure-link i {
@@ -445,7 +466,7 @@ input[type="color"] {
 }
 
 .azure-link:hover i {
-    color: white;
+    color: #0078d4;
 }
 
 .fa-microsoft {

@@ -215,11 +215,9 @@ function renderGithubRepos(reposToRender) {
         // Determine repository URLs
         const githubUrl = `https://github.com/${repo.owner}/${repo.repo}`;
         let azureDevOpsUrl = '';
-        let pipelinesUrl = '';
 
         if (repo.isAzureDevOps) {
             azureDevOpsUrl = `https://dev.azure.com/${repo.azureOrg}/${repo.azureRepo}/_git/${repo.azureRepo}`;
-            pipelinesUrl = repo.azurePipelines || `https://dev.azure.com/${repo.azureOrg}/${repo.azureRepo}/_build`;
             card.className += ' has-azure-devops';
         }
 
@@ -260,26 +258,46 @@ function renderGithubRepos(reposToRender) {
                     <i class="fas fa-play-circle"></i> Actions
                 </a>`;
 
+        // Add remaining GitHub links for non-Azure repos
+        card.querySelector('.github-links').innerHTML += `
+            <a href="${githubUrl}/discussions" class="github-link" target="_blank">
+                <i class="fas fa-comments"></i> Discussions
+            </a>
+        `;
+
         // Add Azure DevOps-specific links if this repo has Azure DevOps
         if (repo.isAzureDevOps) {
             card.querySelector('.github-links').innerHTML += `
                 <a href="${azureDevOpsUrl}/pullrequests" class="github-link azure-link" target="_blank">
                     <i class="fas fa-code-branch"></i> Azure PRs
-                </a>
-                <a href="${pipelinesUrl}" class="github-link azure-link" target="_blank">
-                    <i class="fas fa-play-circle"></i> Pipelines
-                </a>
-            `;
-        } else {
-            // Add remaining GitHub links for non-Azure repos
-            card.querySelector('.github-links').innerHTML += `
-                <a href="${githubUrl}/discussions" class="github-link" target="_blank">
-                    <i class="fas fa-comments"></i> Discussions
-                </a>
-                <a href="${githubUrl}/projects" class="github-link" target="_blank">
-                    <i class="fas fa-project-diagram"></i> Projects
-                </a>
-            `;
+                </a>`;
+
+            // Only add pipelines link if it was explicitly provided
+            if (repo.azurePipelines) {
+                card.querySelector('.github-links').innerHTML += `
+                    <a href="${repo.azurePipelines}" class="github-link azure-link" target="_blank">
+                        <i class="fas fa-play-circle"></i> Pipelines
+                    </a>
+                `;
+            }
+
+            // Only add internal pipelines link if it was explicitly provided
+            if (repo.azurePipelinesInternal) {
+                card.querySelector('.github-links').innerHTML += `
+                    <a href="${repo.azurePipelinesInternal}" class="github-link azure-link" target="_blank">
+                        <i class="fas fa-play-circle"></i> Internal Pipelines
+                    </a>
+                `;
+            }
+
+            // Only add public pipelines link if it was explicitly provided
+            if (repo.azurePipelinesPublic) {
+                card.querySelector('.github-links').innerHTML += `
+                    <a href="${repo.azurePipelinesPublic}" class="github-link azure-link" target="_blank">
+                        <i class="fas fa-play-circle"></i> Public Pipelines
+                    </a>
+                `;
+            }
         }
 
         card.querySelector('.github-links').innerHTML += `
@@ -345,23 +363,29 @@ function addGithubRepo(e) {
     let azureOrg = '';
     let azureRepo = '';
     let azurePipelines = '';
+    let azurePipelinesInternal = '';
+    let azurePipelinesPublic = '';
 
     if (isAzureDevOps) {
         azureOrg = document.getElementById('azure-org').value;
         azureRepo = document.getElementById('azure-repo').value;
         azurePipelines = document.getElementById('azure-pipelines').value;
+        azurePipelinesInternal = document.getElementById('azure-pipelines-internal').value;
+        azurePipelinesPublic = document.getElementById('azure-pipelines-public').value;
     }
 
     const newRepo = {
         id: Date.now(),
-        owner: isAzureDevOps ? azureOrg : owner,
-        repo: isAzureDevOps ? azureRepo : repo,
-        title: `${isAzureDevOps ? azureOrg : owner}/${isAzureDevOps ? azureRepo : repo}`,
+        owner,
+        repo,
+        title: `${owner}/${repo}`,
         type: 'github',
         isAzureDevOps,
         azureOrg,
         azureRepo,
-        azurePipelines
+        azurePipelines,
+        azurePipelinesInternal,
+        azurePipelinesPublic
     };
 
     githubRepos.push(newRepo);
