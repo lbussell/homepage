@@ -217,20 +217,20 @@ function renderGithubRepos(reposToRender) {
         const githubUrl = `https://github.com/${repo.owner}/${repo.repo}`;
         let azureDevOpsUrl = '';
         let pipelinesUrl = '';
-        
+
         if (repo.isAzureDevOps) {
             azureDevOpsUrl = `https://dev.azure.com/${repo.azureOrg}/${repo.azureRepo}/_git/${repo.azureRepo}`;
             pipelinesUrl = repo.azurePipelines || `https://dev.azure.com/${repo.azureOrg}/${repo.azureRepo}/_build`;
             card.className += ' has-azure-devops';
         }
 
-        // Create badge with appropriate icon
-        const ownerBadgeContent = `<i class="fab fa-github"></i> ${repo.owner}`;
-        
+        // Create badge with appropriate icon that links to the repository
+        const ownerBadgeContent = `<a href="${githubUrl}" target="_blank" class="badge-link"><i class="fab fa-github"></i> ${repo.owner}</a>`;
+
         // Create Azure DevOps badge if needed
         let azureBadgeContent = '';
         if (repo.isAzureDevOps) {
-            azureBadgeContent = `<span class="owner-badge azure-owner-badge"><i class="fab fa-microsoft"></i> ${repo.azureOrg}</span>`;
+            azureBadgeContent = `<span class="owner-badge azure-owner-badge"><a href="${azureDevOpsUrl}" target="_blank" class="badge-link"><i class="fab fa-microsoft"></i> ${repo.azureOrg}</a></span>`;
         }
 
         card.innerHTML = `
@@ -251,9 +251,6 @@ function renderGithubRepos(reposToRender) {
                 </div>
             </div>
             <div class="github-links">
-                <a href="${githubUrl}" class="github-link" target="_blank">
-                    <i class="fas fa-code"></i> GitHub
-                </a>
                 <a href="${githubUrl}/issues" class="github-link" target="_blank">
                     <i class="fas fa-exclamation-circle"></i> Issues
                 </a>
@@ -267,9 +264,6 @@ function renderGithubRepos(reposToRender) {
         // Add Azure DevOps-specific links if this repo has Azure DevOps
         if (repo.isAzureDevOps) {
             card.querySelector('.github-links').innerHTML += `
-                <a href="${azureDevOpsUrl}" class="github-link azure-link" target="_blank">
-                    <i class="fab fa-microsoft"></i> Azure
-                </a>
                 <a href="${azureDevOpsUrl}/pullrequests" class="github-link azure-link" target="_blank">
                     <i class="fas fa-code-branch"></i> Azure PRs
                 </a>
