@@ -525,23 +525,23 @@ function resetData() {
         // Clear data structures
         bookmarks = [];
         githubRepos = [];
-        
+
         // Reset settings to defaults
         settings = {
             pageTitle: 'My Bookmarks',
             dashboardTitle: 'My Dashboard',
             primaryColor: '#4285f4'
         };
-        
+
         // Clear localStorage
         localStorage.removeItem('bookmarks');
         localStorage.removeItem('githubRepos');
         localStorage.setItem('settings', JSON.stringify(settings));
-        
+
         // Update UI
         renderAll();
         applySettings();
-        
+
         // Close modal and show notification
         closeModals();
         alert('All data has been reset successfully.');

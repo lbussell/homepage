@@ -5,10 +5,10 @@
     --sidebar-background: #ffffff;
     --card-background: #ffffff;
     --text-color: #333333;
-    --icon-color: #777777; /* Dimmer color for icons */
-    --border-radius: 8px;
+    --icon-color: #59636e;
+    --border-radius: 6px;
     --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    --transition: all 0.3s ease;
+    --transition: all 0.15s ease;
     --sidebar-width: 280px;
 }
 
@@ -78,7 +78,6 @@ body {
     padding: 10px;
     border-radius: var(--border-radius);
     margin-bottom: 8px;
-    transition: var(--transition);
     cursor: pointer;
     text-decoration: none;
     color: var(--text-color);
@@ -122,7 +121,6 @@ body {
 .bookmark-actions {
     display: flex;
     opacity: 0;
-    transition: opacity 0.2s;
 }
 
 .bookmark-item:hover .bookmark-actions {
@@ -136,7 +134,6 @@ body {
     font-size: 14px;
     color: var(--icon-color);
     margin-left: 5px;
-    transition: var(--transition);
 }
 
 .action-btn:hover {
@@ -206,8 +203,8 @@ content {
 }
 
 .github-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
 }
 
 .github-header {
@@ -225,6 +222,7 @@ content {
     justify-content: center;
     border-radius: 50%;
     color: white;
+    transition: var(--transition);
     background-color: var(--secondary-color);
 }
 
@@ -252,8 +250,7 @@ content {
     text-align: center;
     display: flex;
     align-items: center;
-    gap: 5px;
-    justify-content: center;
+    gap: 8px;
 }
 
 .github-link i {
@@ -266,7 +263,7 @@ content {
 }
 
 .github-link:hover i {
-    color: white;
+    color: #ffffffee;
 }
 
 /* Button Styles */
@@ -300,7 +297,7 @@ content {
 
 .btn:hover, .btn-small:hover {
     opacity: 0.9;
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 }
 
 .btn i, .btn-small i {
