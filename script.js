@@ -39,8 +39,7 @@ let bookmarks = JSON.parse(localStorage.getItem('bookmarks')) || [];
 let githubRepos = JSON.parse(localStorage.getItem('githubRepos')) || [];
 let settings = JSON.parse(localStorage.getItem('settings')) || {
     pageTitle: 'My Bookmarks',
-    dashboardTitle: 'My Dashboard',
-    primaryColor: '#4285f4'
+    dashboardTitle: 'My Dashboard'
 };
 
 // Initialize
@@ -467,7 +466,6 @@ function openSettingsModal() {
     // Set current values in form
     document.getElementById('page-title').value = settings.pageTitle || '';
     document.getElementById('dashboard-title-input').value = settings.dashboardTitle || '';
-    document.getElementById('primary-color').value = settings.primaryColor || '#4285f4';
 
     // Open the modal
     openModal(settingsModal);
@@ -478,13 +476,11 @@ function saveSettings(e) {
 
     const pageTitle = document.getElementById('page-title').value;
     const dashboardTitle = document.getElementById('dashboard-title-input').value;
-    const primaryColor = document.getElementById('primary-color').value;
 
     settings = {
         ...settings,
         pageTitle: pageTitle || 'My Bookmarks',
-        dashboardTitle: dashboardTitle || 'My Dashboard',
-        primaryColor: primaryColor || '#4285f4'
+        dashboardTitle: dashboardTitle || 'My Dashboard'
     };
 
     localStorage.setItem('settings', JSON.stringify(settings));
@@ -500,9 +496,6 @@ function applySettings() {
     if (dashboardTitleEl) {
         dashboardTitleEl.textContent = settings.dashboardTitle;
     }
-
-    // Update the primary color CSS variable
-    document.documentElement.style.setProperty('--primary-color', settings.primaryColor);
 }
 
 // Data Management Functions
@@ -595,8 +588,7 @@ function resetData() {
         // Reset settings to defaults
         settings = {
             pageTitle: 'My Bookmarks',
-            dashboardTitle: 'My Dashboard',
-            primaryColor: '#4285f4'
+            dashboardTitle: 'My Dashboard'
         };
 
         // Clear localStorage
